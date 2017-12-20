@@ -77,7 +77,7 @@ function start(route, handle) {
 		//Если пользователь кликнул по игровому полю
 		socket.on('hod', function(room, i){
 			//Если противника нет
-			if (games[room].o === undefined){
+			if (games[room] === undefined){
 				io.sockets.in(room).emit('chat message', 'System: follow link!');
 			} else {
 				//Если ходил крестик в первый раз 
