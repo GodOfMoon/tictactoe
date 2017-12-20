@@ -129,7 +129,7 @@ function start(route, handle) {
 		
 		if (mas[0] === mas[4] && mas[0] === mas[8]) return mas[0];
 		if (mas[2] === mas[4] && mas[2] === mas[6]) return mas[2];
-		if (hod === 8) return 1;
+		if (hod === 9) return 1;
 		return 0;
 	}
 }
