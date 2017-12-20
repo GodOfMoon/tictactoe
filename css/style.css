@@ -1,0 +1,32 @@
+#game {
+	width: 150px;
+	height: 150px;
+    margin: 0 auto;
+	background: lightblue;
+}
+.block {
+	width: 50px;
+	height: 50px;
+	float: left;
+	border: 1px solid white;
+	box-sizing: border-box;
+	line-height: 50px;
+	text-align: center;
+	font-size: 40px;
+	text-transform: uppercase;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font: 13px Helvetica, Arial; }
+form { background: #000; padding: 3px; width: 100%; position: absolute; bottom: 0; }
+form input { border: 0; padding: 10px; width: 90.4%; margin-right: .5%; }
+form button { width: 9%; background: #99f; border: none; padding: 10px; }
+#chat {
+	width: 700px;
+	height: 400px;
+	background: #99f;
+	position: relative;
+    margin: 0 auto;
+}
+#messages { list-style-type: none; margin: 0; padding: 0; }
+#messages li { padding: 5px 10px; background: #7d7; }
+#messages li:nth-child(odd) { background: #0d0; }

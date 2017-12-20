@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+	<head>
+		<title>test</title>
+		<link rel="stylesheet" href="style.css">
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			//Устанавливаем соединение с сервером
+			var socket = io();
+			//Запоминаем нашу комнату
+			var room;
+			//Запоминаем отрисованные блоки на игровом поле
+			var allblock;
+			//Закончилась ли партия
+			var end = 0;
+			//Если в адресной строке что то есть -- считаем это нашей игровой комнатой
+			try { room = window.location.href.match(/\/(\w+)$/)[1]; } catch(e){}
+			//Иначе просим оппонента. Если у нас есть комната -- заходим
+			if (room === undefined) {
+				socket.emit('get opponent');
+			} else {
+				socket.emit('enter the room', room);				
+			}
+			//Пишем сообщение в чат
+			socket.on('chat message', function(msg) {
+				var ul = document.getElementById("messages");
+				var li = document.createElement("li");
+				li.appendChild(document.createTextNode(msg));
+				ul.appendChild(li);
+			});
+			socket.on('set room', function(value) {
+				room = value;
+			});
+			socket.on('end', function() {
+				end = 1;
+			});
+			socket.on('hod', function(i, value) {
+				allblock[i].innerHTML = value;
+			});
+			function send(){
+				var msg = document.getElementById("msg");
+				socket.emit('chat message', msg.value, room);
+				msg.value = '';
+				return false;
+			}
+			function hod(i){
+				socket.emit('hod', room, i);
+			}
+			window.onload = function(){
+				for (var i = 0; i < 9; i++) {
+					document.getElementById('game').innerHTML+='<div class="block"></div>';
+				}
+				allblock = document.getElementsByClassName('block');
+				document.getElementById('game').onclick = function(event){
+					if (!end && event.target.className == 'block'){
+						var i = 0;
+						while (allblock[i] != event.target) {
+							i++
+						}
+						hod(i);
+					}
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div id="game"></div>
+		<div id="chat">
+			<ul id="messages"></ul>
+			<form id="send">
+				<input id="msg"><button type="button" onclick="send()">Send</button>
+			</form>
+		</div>
+	</body>
+</html>
