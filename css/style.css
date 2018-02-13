@@ -16,17 +16,37 @@
 	text-transform: uppercase;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font: 13px Helvetica, Arial; }
-form { background: #000; padding: 3px; width: 100%; position: absolute; bottom: 0; }
-form input { border: 0; padding: 10px; width: 90.4%; margin-right: .5%; }
-form button { width: 9%; background: #99f; border: none; padding: 10px; }
+body { 
+	font: 13px Helvetica, Arial; 
+}
+form { 
+	background: #000; 
+	padding: 3px; 
+	width: 700px;
+	bottom: 0; 
+	position: relative;
+    margin: 0 auto;
+}
+form input { 
+	border: 0; 
+	padding: 10px; 
+	width: 90.4%; 
+	margin-right: .5%; 
+}
+form button { 
+	width: 9%; 
+	background: #f5cab4; 
+	border: none; 
+	padding: 10px; 
+}
 #chat {
+	overflow: auto;
 	width: 700px;
 	height: 400px;
-	background: #99f;
+	background: #c5c5c5;
 	position: relative;
     margin: 0 auto;
 }
 #messages { list-style-type: none; margin: 0; padding: 0; }
-#messages li { padding: 5px 10px; background: #7d7; }
-#messages li:nth-child(odd) { background: #0d0; }
+#messages li { padding: 5px 10px; background: #f3b0a2; }
+#messages li:nth-child(odd) { background: #f5cab4; }

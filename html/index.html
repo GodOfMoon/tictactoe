@@ -27,6 +27,8 @@
 				var li = document.createElement("li");
 				li.appendChild(document.createTextNode(msg));
 				ul.appendChild(li);
+				var chat = document.getElementById("chat");
+				chat.scrollTop = chat.scrollHeight;
 			});
 			socket.on('set room', function(value) {
 				room = value;
@@ -41,6 +43,9 @@
 				var msg = document.getElementById("msg");
 				socket.emit('chat message', msg.value, room);
 				msg.value = '';
+				//прокрутка к низу
+				var chat = document.getElementById("chat");
+				chat.scrollTop = chat.scrollHeight;
 				return false;
 			}
 			function hod(i){
@@ -72,9 +77,9 @@
 		<div id="game"></div>
 		<div id="chat">
 			<ul id="messages"></ul>
-			<form id="send" onkeypress="if(event.keyCode == 13) return false;">
-				<input id="msg"><button id="button" type="button" onclick="send()">Send</button>
-			</form>
 		</div>
+		<form id="send" onkeypress="if(event.keyCode == 13) return false;">
+			<input id="msg"><button id="button" type="button" onclick="send()">Send</button>
+		</form>
 	</body>
 </html>

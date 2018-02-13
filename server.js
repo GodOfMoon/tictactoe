@@ -4,6 +4,14 @@ var url = require('url');
 var qs = require('querystring');
 var io = require('socket.io');
 
+function time(){
+	var currentTime = new Date();
+	return [
+		currentTime.getHours(),
+		':',
+		currentTime.getMinutes()
+	].join('');
+}
 //Описываем функцию запуска сервера
 function start(route, handle) {
 	var port = 8080;
@@ -37,7 +45,7 @@ function start(route, handle) {
 	var games = [];
 	//Если пользователь присоединился
 	io.on('connection', function(socket){
-		console.log('IO: a user connected');
+		console.log('IO: an user connected');
 		console.log('IO: id:', socket.id);
 		
 		//Если пользователь отсоединился
@@ -48,12 +56,12 @@ function start(route, handle) {
 		socket.on('chat message', function(msg, room){
 			console.log('IO: in:', room, 'chat message:', msg);
 			//Пишем сообщение в комнату пользователя
-			io.sockets.in(room).emit('chat message', msg);
+			io.sockets.in(room).emit('chat message', '[' + time() + '] ' + socket.id + ': '+ msg);
 		});
 		//Если 2й пользователь зашел в комнату
 		socket.on('enter the room', function(room){
 			//Сообщаем комнате, что кто то зашел
-			io.sockets.in(room).emit('chat message', 'System: somebody has just entered');
+			io.sockets.in(room).emit('chat message', '[' + time() + '] System: somebody has just entered');
 			//Пускаем его в комнату
 			socket.join(room);
 			//Инициализируем партию
@@ -69,7 +77,7 @@ function start(route, handle) {
 			//Запускаем пользователя из корня сервера в комнату
 			socket.join(room);
 			//Сообщаем пользователю, как начать партию
-			io.sockets.in(room).emit('chat message', 'System: follow link, to play a game http://localhost:8080/' + room);
+			io.sockets.in(room).emit('chat message', '[' + time() + '] System: follow link, to play a game http://localhost:8080/' + room);
 			//Сообщаем клиенту его комнату
 			io.sockets.in(room).emit('set room', room);
 			console.log('IO: room was set:', room);
@@ -78,7 +86,7 @@ function start(route, handle) {
 		socket.on('hod', function(room, i){
 			//Если противника нет
 			if (games[room] === undefined){
-				io.sockets.in(room).emit('chat message', 'System: follow link!');
+				io.sockets.in(room).emit('chat message', '[' + time() + '] System: follow link!');
 			} else {
 				//Если ходил крестик в первый раз 
 				if (games[room].hod === 0 && games[room].o != socket.id){
@@ -107,9 +115,9 @@ function start(route, handle) {
 		function reactionOnTheWinner(room){
 			var check = checkWinner(games[room].mas, games[room].hod);
 			if (check){
-				if (check === 'x') io.sockets.in(room).emit('chat message', 'Победили крестики');
-				if (check === 'o') io.sockets.in(room).emit('chat message', 'Победили нолики');
-				if (check === 1) io.sockets.in(room).emit('chat message', 'Победила дружба');
+				if (check === 'x') io.sockets.in(room).emit('chat message', '[' + time() + '] Победили крестики');
+				if (check === 'o') io.sockets.in(room).emit('chat message', '[' + time() + '] Победили нолики');
+				if (check === 1) io.sockets.in(room).emit('chat message', '[' + time() + '] Победила дружба');
 				io.sockets.in(room).emit('end');
 			}
 		}		
