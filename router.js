@@ -1,12 +1,15 @@
-//Здесь перенаправляем запрос в обработчик
+//processing request
 function route(handle, pathname, response, post) {
+	
+	//add inf to console
 	console.log('About to route a request for ' + pathname);
-	//Проверяем тип запроса
+	
+	//check the type of request
 	if (typeof handle[pathname] === 'function') {
-		handle[pathname](response, post, pathname);
+		handle[pathname](handle, response, post);
 	} else {
-		handle['/download'](response, post, pathname);
+		handle['/download'](handle, response, post, pathname);		
 	}
 }
-//Создаем возможность использовать функцию из других файлов
+//export functions
 exports.route = route;

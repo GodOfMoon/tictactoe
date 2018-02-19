@@ -1,18 +1,17 @@
-//Прикреляем библиотеки
+//libs
 var fs = require('fs');
 var path = require('path');
 
-//Функция скачивания файлов с сервера
+//function for download files from server
 function download(response, post, pathname) {
 	console.log('Request handler "download" was called. Downloading ' + pathname);
 	
-	//если запрос шел в корень, то запрашиваем index.html
+	//request for index.html
 	if (pathname === '' || pathname === '/' || pathname === undefined)
-		pathname = '/index.html';
-	//скачиваем файл из корня сервера
-	var filePath = pathname;
-	
-	//выясняем, с каким расширением файл хотят скачивать
+		pathname = '/html/index.html';
+	var filePath = '.' + pathname;
+
+	//check file extension & declare content type
 	var extname = path.extname(pathname);
 	var contentType = '';
 	switch (extname) {
@@ -25,7 +24,7 @@ function download(response, post, pathname) {
 			contentType = 'text/css';
 			break;
 	}
-	//если файл не доступен на чтение
+	//if file not exist
 	if (!fs.existsSync(filePath) || (contentType === '')){
 		console.log('Error. Cannot download file ' + pathname);
 		fs.readFile('./html/index.html', function(error, content) {
@@ -34,11 +33,11 @@ function download(response, post, pathname) {
 		});
 	} else {
 		fs.readFile(filePath, function(error, content) {
-			//выгружаем файлик
+			//download file
 			response.writeHead(200, { 'Content-Type': contentType});
 			response.end(content, 'utf-8');
 		});
 	}
 }
-//Создаем возможность использовать функции из других файлов
+//export function
 exports.download = download;

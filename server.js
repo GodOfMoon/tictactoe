@@ -1,4 +1,4 @@
-//Прикреляем библиотеки
+//libs
 var http = require('http');
 var url = require('url');
 var qs = require('querystring');
@@ -12,7 +12,7 @@ function time(){
 		currentTime.getMinutes()
 	].join('');
 }
-//Описываем функцию запуска сервера
+//describe function of starting server
 function start(route, handle) {
 	var port = 8080;
 	var app = http.createServer(onRequest);
@@ -20,24 +20,29 @@ function start(route, handle) {
 	app.listen(port);
 	console.log('Server has started.');
 
-	//ловим запрос
+	
+	//request response function
 	function onRequest(request, response) {
-		var postData = '';
-		//выясняем, что хотят от сервера
+		
+		//parse url
 		var pathname = url.parse(request.url).pathname;
 		
+		//add inf to console
 		console.log('');
 		console.log('Request for ' + pathname + ' received.');
-
-		//ловим пост-данные
+		
+		//add opportunity to work with post-data
+		var postData = '';
 		request.setEncoding('utf8');
 		request.addListener('data', function(postDataChunk) {
 			postData += postDataChunk;
 		});
 		request.addListener('end', function() {
-			//парсим пост-данные для дальнейшей работы
-			var post = qs.parse( postData );
-			//отправляем запрос в роутер
+			
+			//parse post-data
+			var post = qs.parse(postData);
+			
+			//send request to the router
 			route(handle, pathname, response, post);
 		});
 	}
@@ -141,5 +146,5 @@ function start(route, handle) {
 		return 0;
 	}
 }
-//Создаем возможность использовать функцию из других файлов
+//export functions
 exports.start = start;
