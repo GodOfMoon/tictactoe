@@ -8,8 +8,7 @@ function download(response, post, pathname) {
 	var filePath = pathname;
 	
 	//request for index.html
-	if (pathname === '' || pathname === '/' || pathname === undefined)
-		filePath = '/index.html';
+	filePath = '/index.html';
 
 	//check file extension & declare content type
 	var extname = path.extname(pathname);
@@ -23,11 +22,6 @@ function download(response, post, pathname) {
 			filePath = './css' + filePath;
 			contentType = 'text/css';
 			break;
-	}
-	//if file not exist
-	if (!fs.existsSync(filePath) || (contentType === '')){
-		console.log('Error. Cannot download file ' + pathname);
-		filePath = './html/index.html';
 	}
 	//download file
 	fs.readFile(filePath, function(error, content) {
