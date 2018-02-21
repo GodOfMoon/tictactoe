@@ -1,8 +1,17 @@
+//function for checking files
+function notExist(file){
+	var fs = require('fs');
+	if (! fs.existsSync(file) ){
+		console.log('File ' + file + ' not exist ');
+		return true;
+	} else {
+		return false;
+	}
+}
 //declare the required files
 var files = [
 	'css/style.css',
 	'html/index.html',
-	'input.pdf',
 	'requestHandlers.js',
 	'server.js',
 	'router.js'

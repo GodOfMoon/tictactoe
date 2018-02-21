@@ -12,7 +12,7 @@
 			//game square
 			var allblock;
 			//end of a game
-			var end = 0;
+			var end = 1;
 			//if link with invite
 			try { room = window.location.href.match(/\/(\w+)$/)[1]; } catch(e){}
 			//if not -- we must get a follow link
@@ -33,10 +33,18 @@
 			socket.on('set room', function(value) {
 				room = value;
 			});
+			socket.on('start', function(value) {
+				end = 0;
+				for (var i in allblock) {
+					allblock[i].innerHTML = '';
+				}
+			});
 			socket.on('end', function() {
 				end = 1;
+				var rdy = document.getElementById('readyy');
+				rdy.disabled = false;
 			});
-			socket.on('hod', function(i, value) {
+			socket.on('turn', function(i, value) {
 				allblock[i].innerHTML = value;
 			});
 			function send(){
@@ -50,6 +58,16 @@
 			}
 			function hod(i){
 				socket.emit('hod', room, i);
+			}
+			function nickname(){
+				var nick = document.getElementById('nick');
+				nick.disabled = true;
+				socket.emit('nick', room, nick.value);
+			}
+			function ready(){
+				socket.emit('ready', room);
+				var rdy = document.getElementById('readyy');
+				rdy.disabled = true;
 			}
 			//draw a game square
 			window.onload = function(){
@@ -76,6 +94,12 @@
 	</head>
 	<body>
 		<div id="game"></div>
+		<div id="buttons">
+			<form id="options">
+				<input id="nick" required placeholder="enter your nick"> <button type="button" onclick="nickname()">&#10004;</button>
+				<button id="readyy" type="button" onclick="ready()">ready</button>
+			</form>
+		</div>
 		<div id="chat">
 			<ul id="messages"></ul>
 		</div>
