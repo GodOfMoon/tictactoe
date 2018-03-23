@@ -82,7 +82,6 @@ function start(route, handle) {
 	app.listen(port);
 	console.log('Server has started.');
 
-	
 	//request response function
 	function onRequest(request, response) {
 		

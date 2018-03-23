@@ -5,27 +5,42 @@ var path = require('path');
 //function for download files from server
 function download(response, post, pathname) {
 	console.log('Request handler "download" was called. Downloading ' + pathname);
-	var filePath = pathname;
 	
 	//request for index.html
-	filePath = '/index.html';
-
+	if (pathname === '' || pathname === '/' || pathname === undefined)
+		pathname = '/index.html';
+	var filePath = '.' + pathname;
+	
+	//http status code
+	var statusCode = ''; 
+	
 	//check file extension & declare content type
-	var extname = path.extname(pathname);
+	var extname = path.extname(filePath);
 	var contentType = '';
 	switch (extname) {
 		case '.html':
-			filePath = './html' + filePath;
 			contentType = 'text/html; charset=utf-8';
+			filePath = './html' + pathname
 			break;
 		case '.css':
-			filePath = './css' + filePath;
 			contentType = 'text/css';
-			break;
+			filePath = './css' + pathname
+			break;	
+	}
+	//if file not exist
+	if (!fs.existsSync(filePath) || (contentType === '')){
+//		console.log('Error. Cannot download file ' + pathname);
+		
+		filePath = './html/index.html';
+		contentType = 'text/html; charset=utf-8';
+		//statusCode = 404;
 	}
 	//download file
 	fs.readFile(filePath, function(error, content) {
-		response.writeHead(200, { 'Content-Type': contentType});
+		if (statusCode === '') {
+			statusCode = 200;
+		}
+		response.writeHead(statusCode, { 'Content-Type': contentType});
 		response.end(content, 'utf-8');
 	});
 }
